@@ -1,0 +1,114 @@
+<?php
+$host = "localhost";
+$user = "root"; 
+password= "12345";
+$dbname = "tutorials";
+
+
+$conn = mysqli_connect($host, $user, $password,$dbname);
+
+if(!conn){echo "Error connecting database"; }
+
+<?php
+if(isset($_POST['submit'])){
+	
+	$name =  $_POST['name'];
+	$option = $_POST['option'];
+	$course = " ";
+
+	foreach ($option as $opt){
+		$course. = $opt." ";
+
+	}
+
+	$query = "INSERT INTO `users`(`user`,`course`) VALUES('$name','course')";
+
+	if(mysqli_query($conn,$query)){ echo "User recorded Successfully"; }
+
+
+}
+?> 
+
+<body>
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+		<input type="text" name="name" />
+		<input type="checkbox" name="optioon[]" value="php" />php
+		<input type="checkbox" name="option[]" value="c++" /> C++
+		<input type="submit" name="submit" />
+ 	</form>
+</body>
+
+
+
+<?php
+require("connect.php");
+$query = "SELECT * FROM `tutorials` "
+?>
+	<table>
+	<tr>
+		<th>Name</th>
+		<th>Course</th>
+	</tr>
+<?
+
+if($result = mysqli_query($conn,$query)){}
+	while($row = mysqli_fetch_assoc['result']){
+		echo "<tr>";
+		echo "<td>".$row['name']."</td>";
+		echo "<td>".$row['course']."</td>";
+		echo "<a href='edit.php?editno=".$['sno']."'></a>"
+		echo "<a href='delete.php?deleteno=".$['sno']."'></a>"
+		echo "</tr>";
+
+	}
+?>
+</table>
+edit.php
+<?php
+require ("connect.php");
+$editno = $_GET['editno'];
+$query = "SELECT * FROM `students` WHERE `sno`=".$editno;
+if($result = mysqli_query($conn, $query)){
+?>
+<form action="update.php" action="post">
+<table>
+?php
+	while($row = mysqli_fetch_assoc($result)){
+		?>
+		<tr>
+			<td><input type="hidden" name="name" value="<?php echo $row['sno'];?>"/></td>
+			<td><input type="text" name="name" value="<?php echo $row['name'];?>" /></td>
+			<td><input type="text" name="name" value="<?php echo $row['course'];?>" /></td>
+			<td><input type="checkbox" name="option[]"  /></td>
+			<td><input type="checkbox" name="option[]"  /></td>
+			<td><input type="submit" name="submit"  /></td>
+		</tr>
+		<?php
+	}
+}
+?>
+</table>
+</form>
+
+update.php
+<?php
+require("connect.php");
+$sno = $_POST['sno'];
+$name= $_POST['name'];
+$course= $_POST['course'];
+
+$query = "UPDATE `students` SET `name`='$name' `course`='$course' WHERE `sno`='$sno' ";
+if(mysqli_query($conn,$query)){
+	echo "Record Updated Successfully";
+}
+
+
+
+?>
+---------------------------------------------------------------------------------------------
+delete.php
+<?php
+require("connect.php");
+$deleteno = $_GET['deleteno'];
+$query ="DELETE FROM `student` WHERE `sno`='$deleteno'";
+if(mysqli_query($conn,$query)){echo "Record deleted Successfully"; }
